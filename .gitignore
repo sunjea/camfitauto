@@ -1,0 +1,7 @@
+cupang-env
+*/build/*
+*.exe
+*.log
+*/__pycache__/*
+venv/*
+/src/main.spec
