@@ -3,7 +3,7 @@ import requests
 import json
 import logging
 
-import .api_result import ApiResult
+from .api_result import ApiResult
 
 logger = logging.getLogger(__name__)
 

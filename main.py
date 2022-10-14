@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic 
 from PyQt5.QtCore import *
 
-from .api.api_camfit import requestGetData
+from api.api_camfit import requestGetData
 from util import getTimeStamp
 
 #UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다. 
