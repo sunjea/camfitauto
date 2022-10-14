@@ -10,4 +10,3 @@ class ApiResult:
                 "data": self.data,
             }
         )
-

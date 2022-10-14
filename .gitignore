@@ -5,3 +5,5 @@ cupang-env
 */__pycache__/*
 venv/*
 /src/main.spec
+__pycache__/*
+keydata.db
