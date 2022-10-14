@@ -16,7 +16,6 @@ def getTimeStamp(params_time) :
     else :
         params_time['stime'] = round(stimestamp)*1000
         params_time['etime'] = round(etimestamp)*1000
-        logger.info(' == After getTimeStamp : stime- {}, etime- {} '.format(params_time['stime'], params_time['etime']))
         return 0
 
         

@@ -47,12 +47,12 @@ def requestGetData(apiUri, _id=None, getParams=None):
         response = requests.get(url=queryUrl, params=getParams,
                                     headers=headers
                                 )                        
-        # logger.info(f' == Request GetData URL : {response.url} ')   
         rsp_data = None
         if response.text and response.text != "":
             rsp_data = json.loads(response.text)
         result = ApiResult(response.status_code, rsp_data)   
     except Exception as err:
+        logger.error(f' == requestGetData Error : {err} ')
         raise err
     
     return result

@@ -58,6 +58,7 @@ def getSelectCampId(idx, name):
         rows = 0    
     else :
         rows = rows[0]
+    logger.info(f' == getSelectCampId : {rows} ')
     conn.close()
     return rows
 
@@ -70,6 +71,7 @@ def getSelectZoneId(idx, name):
         rows = 0    
     else :
         rows = rows[0]
+    logger.info(f' == getSelectZoneId : {rows} ')
     conn.close()
     return rows
 
@@ -82,6 +84,7 @@ def getSelectSiteId(idx, name):
         rows = 0    
     else :
         rows = rows[0]
+    logger.info(f' == getSelectSiteId : {rows} ')        
     conn.close()
     return rows
 

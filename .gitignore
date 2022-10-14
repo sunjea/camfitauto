@@ -7,3 +7,4 @@ venv/*
 /src/main.spec
 __pycache__/*
 keydata.db
+__pycache__/util.cpython-310.pyc

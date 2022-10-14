@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>캠핏 - 캠핑장 예약 프로그램</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -54,6 +54,15 @@
      </item>
      <item row="5" column="1">
       <widget class="QDateEdit" name="dateEdit">
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
+       <property name="accelerated">
+        <bool>false</bool>
+       </property>
        <property name="maximumDate">
         <date>
          <year>2100</year>
@@ -65,6 +74,19 @@
         <date>
          <year>2021</year>
          <month>9</month>
+         <day>14</day>
+        </date>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="timeSpec">
+        <enum>Qt::LocalTime</enum>
+       </property>
+       <property name="date">
+        <date>
+         <year>2022</year>
+         <month>10</month>
          <day>14</day>
         </date>
        </property>
@@ -80,7 +102,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>캠핑 기간 ( 입실 일/ 퇴실 일 )</string>
+        <string>캠핑 기간 ( 체크인 / 체크아웃 )</string>
        </property>
       </widget>
      </item>
@@ -112,6 +134,12 @@
      </item>
      <item row="5" column="2">
       <widget class="QDateEdit" name="dateEdit_2">
+       <property name="wrapping">
+        <bool>false</bool>
+       </property>
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
        <property name="maximumDate">
         <date>
          <year>2100</year>
@@ -124,6 +152,16 @@
          <year>2021</year>
          <month>10</month>
          <day>14</day>
+        </date>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>
+         <year>2022</year>
+         <month>10</month>
+         <day>15</day>
         </date>
        </property>
       </widget>
