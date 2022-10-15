@@ -10,11 +10,19 @@ logger = logging.getLogger(__name__)
 '''
     apiUrl : https://api.camfit.co.kr  - 캠핏 API URL(공통)
     
-    apiUri :
-        /v2/search/count  - 캠핑장 검색 카운트 URI
-        /v2/search        - 캠핑장 검색
-        /v1/camps/zones/count/{_id} - 캠핑장 사이트 카운트
-    
+    apiUri : 
+        GET :
+            /v2/search/count            - 캠핑장 검색 카운트
+            /v2/search                  - 캠핑장 리스트
+            /v1/camps/zones/count/{_id} - 캠핑장 Zone 카운트
+            /v1/camps/zones/{_id}       - 캠핑장 Zone 정보
+            /v1/sites/{_id}             - 캠핑장 Site 정보
+            /v1/zones/services          - 캠핑장 Zone 에서 제공하는 서비스들 (calculate, book에 사용)
+
+        POST :
+            /v1/booking/calculate       - 캠핑장 총 비용 계산 요청
+            /v1/book                    - 캠핑장 예약 요청
+
 '''
 
 apiUrl = 'https://api.camfit.co.kr'
@@ -37,7 +45,6 @@ headers={
 def requestGetData(apiUri, _id=None, getParams=None):
 
     result: ApiResult = None
-    
     if _id != None :
         queryUrl = f'{apiUrl}{apiUri}/{_id}'
     else :
@@ -59,15 +66,19 @@ def requestGetData(apiUri, _id=None, getParams=None):
         
 def requestPostData(apiUri, postObj):
 
+    result: ApiResult = None
     queryUrl = f'{apiUrl}{apiUri}'
-    logger.info(f' == Request PostData URL : {queryUrl} ')
-    response = requests.post(url=queryUrl,
-                                headers=headers,
-                                data=json.dumps(postObj)
-                            )
+    try :
+        response = requests.post(url=queryUrl,
+                                    headers=headers,
+                                    data=json.dumps(postObj)
+                                )
+        rsp_data = None
+        if response.text and response.text != "":
+            rsp_data = json.loads(response.text)
+        result = ApiResult(response.status_code, rsp_data)   
+    except Exception as err:
+        logger.error(f' == requestPostData Error : {err} ')
+        raise err
     
-    if response.status_code == 200 :
-        return response
-    else :
-        logger.error(f' == Response : {response.status_code} ')
-        return -1
+    return result

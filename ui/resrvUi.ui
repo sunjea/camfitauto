@@ -24,35 +24,195 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="11" column="0">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>캠핑장 리스트</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>캠핑장 사이트 리스트</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>검색</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLineEdit" name="lineEdit_4">
+       <property name="maxLength">
+        <number>10</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_6">
+       <property name="maxLength">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_5">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>캠핑장 Zone 정보</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QListWidget" name="listWidget_3">
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="3">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="text">
+        <string>2</string>
+       </property>
+       <property name="maxLength">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>예약 신청</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
         <string>요청사항</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
+     <item row="6" column="0" colspan="2">
+      <widget class="QLabel" name="label">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="text">
+        <string>예약정보</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QListWidget" name="listWidget_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="2">
+      <widget class="QLineEdit" name="lineEdit_5">
+       <property name="maxLength">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
       <widget class="QLineEdit" name="lineEdit_3">
        <property name="text">
         <string>0</string>
        </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>성인 수 / 청소년(미성년)</string>
+       <property name="maxLength">
+        <number>2</number>
        </property>
       </widget>
      </item>
-     <item row="9" column="0">
+     <item row="4" column="0">
+      <widget class="QListWidget" name="listWidget">
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>성인 수 / 미취학 아동(미성년)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>이름 / 연락처</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="text">
+        <string>캠핑장 검색</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="text">
+        <string>캠핑 기간 ( 체크인 / 체크아웃 )</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
       <widget class="QDateEdit" name="dateEdit">
        <property name="readOnly">
         <bool>false</bool>
@@ -92,47 +252,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QListWidget" name="listWidget">
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>캠핑 기간 ( 체크인 / 체크아웃 )</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QLabel" name="label">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="text">
-        <string>예약정보</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QListWidget" name="listWidget_2">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
+     <item row="0" column="2">
       <widget class="QDateEdit" name="dateEdit_2">
        <property name="wrapping">
         <bool>false</bool>
@@ -163,89 +283,6 @@
          <month>10</month>
          <day>15</day>
         </date>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="2">
-      <widget class="QLineEdit" name="lineEdit_5"/>
-     </item>
-     <item row="11" column="1" colspan="2">
-      <widget class="QLineEdit" name="lineEdit_6"/>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLineEdit" name="lineEdit_2">
-       <property name="text">
-        <string>2</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>예약 대기 시작</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>검색</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="3">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="2">
-      <widget class="QListWidget" name="listWidget_3">
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLineEdit" name="lineEdit_4"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>캠핑장 리스트</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_5">
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>캠핑장 Zone 정보</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>캠핑장 사이트 리스트</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

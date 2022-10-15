@@ -7,8 +7,8 @@ def createTable() :
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
     cursor.execute('CREATE TABLE IF NOT EXISTS CampingListInfo_T(IDX INTEGER, CAMP_NAME TEXT, _ID TEXT);')
-    cursor.execute('CREATE TABLE IF NOT EXISTS ZoneListInfo_T(IDX INTEGER, ZONE_NAME TEXT, _ID TEXT);')
-    cursor.execute('CREATE TABLE IF NOT EXISTS SiteListInfo_T(IDX INTEGER, SITE_NAME TEXT, _ID TEXT);')
+    cursor.execute('CREATE TABLE IF NOT EXISTS ZoneListInfo_T(IDX INTEGER, ZONE_NAME TEXT, _ID TEXT, CAMPE_ID TEXT);')
+    cursor.execute('CREATE TABLE IF NOT EXISTS SiteListInfo_T(IDX INTEGER, SITE_NAME TEXT, _ID TEXT, ZONE_ID TEXT, CAMPE_ID TEXT);')
     conn.close()
 
 
@@ -24,7 +24,7 @@ def insertCampingInfo(idx, name, _id):
         conn.commit()
     conn.close()
 
-def insertZoneInfo(idx, name, _id):
+def insertZoneInfo(idx, name, _id, campId):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
     cursor.execute('SELECT _ID FROM ZoneListInfo_T WHERE _ID=:_ID ;',{"_ID": _id})
@@ -32,11 +32,11 @@ def insertZoneInfo(idx, name, _id):
     rows = cursor.fetchone()    
     if rows == None :
         logger.info(f' == insertZoneInfo : {idx}, {name}, {_id} ')
-        cursor.execute('INSERT INTO ZoneListInfo_T VALUES(:IDX, :ZONE_NAME, :_ID);', {"IDX":idx, "ZONE_NAME":name, "_ID":_id})  
+        cursor.execute('INSERT INTO ZoneListInfo_T VALUES(:IDX, :ZONE_NAME, :_ID, :CAMPE_ID);', {"IDX":idx, "ZONE_NAME":name, "_ID":_id, "CAMPE_ID":campId})  
         conn.commit()
     conn.close()
 
-def insertSiteInfo(idx, name, _id):
+def insertSiteInfo(idx, name, _id, campId, zoneId):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
     cursor.execute('SELECT _ID FROM SiteListInfo_T WHERE _ID=:_ID ;',{"_ID": _id})
@@ -44,7 +44,7 @@ def insertSiteInfo(idx, name, _id):
     rows = cursor.fetchone()    
     if rows == None :
         logger.info(f' == insertSiteInfo : {idx}, {name}, {_id} ')
-        cursor.execute('INSERT INTO SiteListInfo_T VALUES(:IDX, :SITE_NAME, :_ID);', {"IDX":idx, "SITE_NAME":name, "_ID":_id})  
+        cursor.execute('INSERT INTO SiteListInfo_T VALUES(:IDX, :SITE_NAME, :_ID, :ZONE_ID, :CAMPE_ID);', {"IDX":idx, "SITE_NAME":name, "_ID":_id, "ZONE_ID":zoneId , "CAMPE_ID":campId })  
         conn.commit()
     conn.close()
 
@@ -52,7 +52,7 @@ def insertSiteInfo(idx, name, _id):
 def getSelectCampId(idx, name):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT _id FROM CampingListInfo_T WHERE IDX=:IDX AND CAMP_NAME=:CAMP_NAME;',{"IDX": idx, "CAMP_NAME": name})
+    cursor.execute('SELECT _id FROM CampingListInfo_T WHERE IDX=:IDX AND CAMP_NAME=:CAMP_NAME;',{"IDX": idx, "CAMP_NAME":name})
     rows = cursor.fetchone()    
     if rows == None :
         rows = 0    
@@ -62,10 +62,10 @@ def getSelectCampId(idx, name):
     conn.close()
     return rows
 
-def getSelectZoneId(idx, name):
+def getSelectZoneId(idx, camp_id):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT _id FROM ZoneListInfo_T WHERE IDX=:IDX AND ZONE_NAME=:ZONE_NAME;',{"IDX": idx, "ZONE_NAME": name})
+    cursor.execute('SELECT _id FROM ZoneListInfo_T WHERE IDX=:IDX AND CAMPE_ID=:CAMPE_ID;',{"IDX": idx, "CAMPE_ID":camp_id})
     rows = cursor.fetchone()    
     if rows == None :
         rows = 0    
@@ -75,10 +75,10 @@ def getSelectZoneId(idx, name):
     conn.close()
     return rows
 
-def getSelectSiteId(idx, name):
+def getSelectSiteId(idx, camp_id, zone_id):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT _id FROM SiteListInfo_T WHERE IDX=:IDX AND SITE_NAME=:SITE_NAME;',{"IDX": idx, "SITE_NAME": name})
+    cursor.execute('SELECT _id FROM SiteListInfo_T WHERE IDX=:IDX AND ZONE_ID=:ZONE_ID AND CAMPE_ID=:CAMPE_ID;',{"IDX": idx, "ZONE_ID":zone_id, "CAMPE_ID":camp_id})
     rows = cursor.fetchone()    
     if rows == None :
         rows = 0    
