@@ -22,6 +22,7 @@ params_time = dict()
 
 # 계산 정보
 calculateInfo = dict()
+bookInfo = dict()
 '''
  {
     "siteId": "62591a566bdb9c001ef4454d",
@@ -150,20 +151,34 @@ class WindowClass(QMainWindow, form_class) :
         getServiceIdInfo()
         calculateInfo['hasTrailer'] = False
         calculateInfo['hasCampingCar'] = False
-
-        json_object = json.dumps(calculateInfo, indent = 4) 
-        logger.info(f' == set calculateInfo == \n {json_object} ')
-
+ 
     def campingReservation(self):
 
         apiUri = '/v1/booking/calculate'
         response = requestPostData(apiUri, calculateInfo)
         status: int = response.status
         data: dict = response.data
-        if 200 == status :
-            logger.info(f' == get campingReservation == \n {data} ')
-
-            pass
+        if 200 == status : 
+            global bookInfo
+            bookInfo = calculateInfo
+            bookInfo['name'] = self.lineEdit_4.text()
+            bookInfo['contact'] = self.lineEdit_5.text()
+            bookInfo['paymentMethod'] = 'bank'
+            bookInfo['coupon'] = None
+            bookInfo['campingPass'] = None
+            bookInfo['carNumbers'] = []
+            bookInfo['accommodationPrice'] = data['totalCharge']
+            bookInfo['parkingPrice'] = 0
+            bookInfo['servicePrice'] = 0
+            bookInfo['couponDiscount'] = 0
+            
+            apiUri = '/v1/book'
+            response = requestPostData(apiUri, calculateInfo)
+            status: int = response.status
+            data: dict = response.data
+            if 200 == status :
+                logger.info(f' == get campingReservation == \n {data} ')
+                pass
 
 class SearchThread(QThread): 
     def __init__(self, parent): 

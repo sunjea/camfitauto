@@ -2,6 +2,7 @@
 import requests
 import json
 import logging
+import sys
 
 from .api_result import ApiResult
 
@@ -39,8 +40,10 @@ headers={
     'Sec-Fetch-Dest': 'empty',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-site',
+   
     'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42'
 }
+
 
 def requestGetData(apiUri, _id=None, getParams=None):
 
@@ -65,13 +68,24 @@ def requestGetData(apiUri, _id=None, getParams=None):
     return result
         
 def requestPostData(apiUri, postObj):
+    
+    datas = json.dumps(postObj)
+    datas = datas.replace(" ", "")
 
+    '''
+        POST 전송시 Headers 에는 Content-Length/Content-Type 이 필수.
+        Body 는 공백 없이 전송
+    '''
+    global headers
+    headers['Content-Length'] = str(len(datas))
+    headers['Content-Type'] = 'application/json'
+    
     result: ApiResult = None
     queryUrl = f'{apiUrl}{apiUri}'
     try :
         response = requests.post(url=queryUrl,
                                     headers=headers,
-                                    data=json.dumps(postObj)
+                                    data=datas
                                 )
         rsp_data = None
         if response.text and response.text != "":
