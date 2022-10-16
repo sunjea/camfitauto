@@ -18,64 +18,14 @@ form_class = uic.loadUiType("ui/resrvUi.ui")[0]
 _thr_mode = None
 
 # 캠핑 기간
-params_time = dict()
+_params_time = dict()
+
+_camp_id = None
+_zone_id = None
 
 # 계산 정보
-calculateInfo = dict()
-bookInfo = dict()
-'''
- {
-    "siteId": "62591a566bdb9c001ef4454d",
-    "checkInDate": {
-        "year": 2022,
-        "month": 9,
-        "day": 27
-    },
-    "checkoutDate": {
-        "year": 2022,
-        "month": 9,
-        "day": 28
-    },
-    "numOfAdults": 2,
-    "numOfTeens": 0,
-    "numOfChildren": 1,
-    "numOfCars": 1,
-    "services": [
-        {
-        "id": "62eddd598c94be001e643f78",
-        "quantity": 0
-        },
-        {
-        "id": "625e1a023ea01c001e018cfc",
-        "quantity": 0
-        }
-    ],
-    "hasTrailer": false,
-    "hasCampingCar": false
-}
-    
-'''
-
-'''
-# 예약 정보
-{
-    calculateInfo 
-    +
-    "name": "이선제",
-    "contact": "01034032820",
-    "paymentMethod": "bank",
-    "coupon": null,
-    "campingPass": null,
-    "carNumbers": [],
-    "accommodationPrice": 80000,
-    "parkingPrice": 0,
-    "servicePrice": 0,
-    "couponDiscount": 0,
-}
-'''
-
-camp_id = None
-zone_id = None
+_calculateInfo = dict()
+_bookInfo = dict()
 
 class WindowClass(QMainWindow, form_class) : 
     def __init__(self) : 
@@ -105,8 +55,7 @@ class WindowClass(QMainWindow, form_class) :
 
     def campingListSearch(self) :
         global _thr_mode
-        _thr_mode = THREAD_MODE.CAMP_LIST
-        
+        _thr_mode = THREAD_MODE.CAMP_LIST 
         self.pushButton_2.setDisabled(True)
         self.pushButton.setDisabled(True)
         self.searchThr.start()
@@ -125,60 +74,63 @@ class WindowClass(QMainWindow, form_class) :
         self.pushButton.setDisabled(True)
         self.searchThr.start()
 
+        
+
     def siteListClicked(self) :
         self.pushButton_2.setEnabled(True)
-        site_id = getSelectSiteId(self.listWidget_3.currentRow(), camp_id, zone_id)
+        site_id = getSelectSiteId(self.listWidget_3.currentRow(), _camp_id, _zone_id)
 
         checkInDate = self.dateEdit.date()
         checkoutDate = self.dateEdit_2.date()
 
-        global calculateInfo
-        calculateInfo['siteId'] = site_id
-        calculateInfo['checkInDate'] = {
+        global _calculateInfo
+        _calculateInfo['siteId'] = site_id
+        _calculateInfo['checkInDate'] = {
             "year" : checkInDate.year(),
             "month" : checkInDate.month(),
             "day" : checkInDate.day()
         }
-        calculateInfo['checkoutDate'] = {
+        _calculateInfo['checkoutDate'] = {
             "year" : checkoutDate.year(),
             "month" : checkoutDate.month(),
             "day" : checkoutDate.day()
         }
-        calculateInfo['numOfAdults'] = int(self.lineEdit_2.text())
-        calculateInfo['numOfTeens'] = 0
-        calculateInfo['numOfChildren'] = int(self.lineEdit_3.text())
-        calculateInfo['numOfCars'] = 1
+        _calculateInfo['numOfAdults'] = int(self.lineEdit_2.text())
+        _calculateInfo['numOfTeens'] = 0
+        _calculateInfo['numOfChildren'] = int(self.lineEdit_3.text())
+        _calculateInfo['numOfCars'] = 1
         getServiceIdInfo()
-        calculateInfo['hasTrailer'] = False
-        calculateInfo['hasCampingCar'] = False
+        _calculateInfo['hasTrailer'] = False
+        _calculateInfo['hasCampingCar'] = False
  
     def campingReservation(self):
 
         apiUri = '/v1/booking/calculate'
-        response = requestPostData(apiUri, calculateInfo)
+        response = requestPostData(apiUri, _calculateInfo)
         status: int = response.status
         data: dict = response.data
         if 200 == status : 
-            global bookInfo
-            bookInfo = calculateInfo
-            bookInfo['name'] = self.lineEdit_4.text()
-            bookInfo['contact'] = self.lineEdit_5.text()
-            bookInfo['paymentMethod'] = 'bank'
-            bookInfo['coupon'] = None
-            bookInfo['campingPass'] = None
-            bookInfo['carNumbers'] = []
-            bookInfo['accommodationPrice'] = data['totalCharge']
-            bookInfo['parkingPrice'] = 0
-            bookInfo['servicePrice'] = 0
-            bookInfo['couponDiscount'] = 0
+            global _bookInfo
+            _bookInfo = _calculateInfo
+            _bookInfo['name'] = self.lineEdit_4.text()
+            _bookInfo['contact'] = self.lineEdit_5.text()
+            _bookInfo['paymentMethod'] = 'bank'
+            _bookInfo['coupon'] = None
+            _bookInfo['campingPass'] = None
+            _bookInfo['carNumbers'] = []
+            _bookInfo['accommodationPrice'] = data['totalCharge']
+            _bookInfo['parkingPrice'] = 0
+            _bookInfo['servicePrice'] = 0
+            _bookInfo['couponDiscount'] = 0
             
             apiUri = '/v1/book'
-            response = requestPostData(apiUri, calculateInfo)
+            response = requestPostData(apiUri, _calculateInfo)
             status: int = response.status
             data: dict = response.data
             if 200 == status :
                 logger.info(f' == get campingReservation == \n {data} ')
-                pass
+                win = CustomDialog("확인","예약이 완료되었습니다. \n 자세한 내용은 문자나 알림톡 확인")
+                r = win.showModal()
 
 class SearchThread(QThread): 
     def __init__(self, parent): 
@@ -227,21 +179,21 @@ class SearchThread(QThread):
             '''
             self.parent.listWidget_2.clear()
             self.parent.listWidget_3.clear()
-            global camp_id
-            camp_id = getSelectCampId(self.parent.listWidget.currentRow(), self.parent.listWidget.currentItem().text())
+            global _camp_id
+            _camp_id = getSelectCampId(self.parent.listWidget.currentRow(), self.parent.listWidget.currentItem().text())
             
             apiUri = '/v1/camps/zones/count'
-            response = requestGetData(apiUri, camp_id)
+            response = requestGetData(apiUri, _camp_id)
             status: int = response.status
             data: dict = response.data
             if 200 == status and int(data) > 0 :
                 logger.info(f" == ZoneList Count : {data} ")
 
-                global params_time
-                params_time['stime'] = self.parent.dateEdit.date().toString("yyyy-MM-dd")
-                params_time['etime'] = self.parent.dateEdit_2.date().toString("yyyy-MM-dd")
+                global _params_time
+                _params_time['stime'] = self.parent.dateEdit.date().toString("yyyy-MM-dd")
+                _params_time['etime'] = self.parent.dateEdit_2.date().toString("yyyy-MM-dd")
 
-                if -1 != getTimeStamp(params_time) :           
+                if -1 != getTimeStamp(_params_time) :           
                     apiUri = '/v1/camps/zones'
                     '''
                         3가지 값은 caculate 전에는 고정
@@ -250,16 +202,16 @@ class SearchThread(QThread):
                         'child': 0,
                     '''
                     getParams = {
-                        'id': camp_id,
+                        'id': _camp_id,
                         'limit' : data,
                         'adult': 2,
                         'teen': 0,
                         'child': 0,
-                        'startTimestamp': params_time['stime'],
-                        'endTimestamp' : params_time['etime'],
+                        'startTimestamp': _params_time['stime'],
+                        'endTimestamp' : _params_time['etime'],
                         'skip' : 0,
                     }
-                    response = requestGetData(apiUri, camp_id, getParams)
+                    response = requestGetData(apiUri, _camp_id, getParams)
                     status: int = response.status
                     data: dict = response.data
                     if 200 == status :
@@ -269,10 +221,10 @@ class SearchThread(QThread):
                                     rs['isUnavailable'] == False and rs['unavailableReason'] == None
                             ''' 
                             if rs['isUnavailable'] != False :
-                                self.parent.listWidget_2.addItem(f"{rs['name']} - {rs['unavailableReason']}")
+                                self.parent.listWidget_2.addItem(f"{rs['name']} - {rs['unavailableReason']} X ")
                             else :
                                 self.parent.listWidget_2.addItem(f"{rs['name']}")
-                            insertZoneInfo(idx, rs['name'], rs['id'], camp_id)
+                            insertZoneInfo(idx, rs['name'], rs['id'], _camp_id)
 
         elif _thr_mode == THREAD_MODE.SITE_LIST :
             self.parent.listWidget_3.clear()
@@ -280,16 +232,16 @@ class SearchThread(QThread):
             3. 선택한 Zone 정보를 DB 검색 후 _id 값으로 Site 정보 조회
                Site 리스트 DB 저장 
             '''
-            global zone_id
-            zone_id = getSelectZoneId(self.parent.listWidget_2.currentRow(), camp_id)
+            global _zone_id
+            _zone_id = getSelectZoneId(self.parent.listWidget_2.currentRow(), _camp_id)
                   
             apiUri = '/v1/sites'
             getParams = {
-                'startTimestamp': params_time['stime'],
-                'endTimestamp' : params_time['etime']
+                'startTimestamp': _params_time['stime'],
+                'endTimestamp' : _params_time['etime']
             }
                 
-            response = requestGetData(apiUri, zone_id, getParams)
+            response = requestGetData(apiUri, _zone_id, getParams)
             status: int = response.status
             data: dict = response.data
             if 200 == status :
@@ -312,7 +264,7 @@ class SearchThread(QThread):
                     except Exception as err:
                         self.parent.listWidget_3.addItem(f"{rs['name']}")
                         pass
-                    insertSiteInfo(idx, rs['name'], rs['id'], camp_id, zone_id)
+                    insertSiteInfo(idx, rs['name'], rs['id'], _camp_id, _zone_id)
             
         self.parent.statusBar.showMessage('처리완료')
         self.parent.pushButton.setEnabled(True)
@@ -323,24 +275,46 @@ def getServiceIdInfo():
     '''
     apiUri = '/v1/zones/services'
     getParams = {
-        'id': zone_id,
+        'id': _zone_id,
         'limit' : 100,
         'skip' : 0
     }
-    response = requestGetData(apiUri, zone_id, getParams)
+    response = requestGetData(apiUri, _zone_id, getParams)
     status: int = response.status
     data: dict = response.data
 
     if 200 == status :
-        global calculateInfo
-        calculateInfo['services'] = []
+        global _calculateInfo
+        _calculateInfo['services'] = []
         for idx, rs in enumerate(data) :
             service = dict()
             logger.info(f" == Service Response idx, id : {idx}, {rs['id']}, {rs['name']} ")
             service['id'] = rs['id']
             service['quantity'] = 0 # 옵션에 대한 기능은 미제공..
-            calculateInfo['services'].append(service)
+            _calculateInfo['services'].append(service)
 
+
+class CustomDialog(QDialog):
+    def __init__(self, title, message):
+        super().__init__()
+
+        self.setWindowTitle(title)
+
+        QBtn = QDialogButtonBox.Ok
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+
+        self.layout = QVBoxLayout()
+        
+        message = QLabel(message)
+
+        self.layout.addWidget(message)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+    
+    def showModal(self):
+        return super().exec_()
 
 if __name__ == '__main__' :
     
