@@ -147,29 +147,41 @@ class SearchThread(QThread):
             '''
             1. 캠핑장 검색 후 캠핑장 리스트를 DB 저장
             '''
-            apiUri = '/v2/search/count'
-            getParams = {
-                'search': text,
-            }
-            logger.info(f" == Search Text : {text} ")
-            response = requestGetData(apiUri, None, getParams)
-            status: int = response.status
-            data: dict = response.data
-            if 200 == status and int(data) > 0 :
-                logger.info(f" == CampList Count : {data} ")
-                apiUri = '/v2/search'
+            global _params_time
+            _params_time['stime'] = self.parent.dateEdit.date().toString("yyyy-MM-dd")
+            _params_time['etime'] = self.parent.dateEdit_2.date().toString("yyyy-MM-dd")
+
+            logger.info(f"{_params_time['stime']}")
+            logger.info(f"{_params_time['etime']}")
+
+            if -1 != getTimeStamp(_params_time) :
+                apiUri = '/v2/search/count'
                 getParams = {
                     'search': text,
-                    'skip' : 0,
-                    'limit' : data
+                    'checkInTimestamp': _params_time['stime'],
+                    'checkoutTimestamp' : _params_time['etime'],
                 }
+                logger.info(f" == Search Text : {text} ")
                 response = requestGetData(apiUri, None, getParams)
                 status: int = response.status
                 data: dict = response.data
-                if 200 == status :
-                    for idx, rs in enumerate(data) :
-                        self.parent.listWidget.addItem(rs['name'])
-                        insertCampingInfo(idx, rs['name'], rs['_id'])
+                if 200 == status and int(data) > 0 :
+                    logger.info(f" == CampList Count : {data} ")
+                    apiUri = '/v2/search'
+                    getParams = {
+                        'search': text,
+                        'checkInTimestamp': _params_time['stime'],
+                        'checkoutTimestamp' : _params_time['etime'],
+                        'skip' : 0,
+                        'limit' : data
+                    }
+                    response = requestGetData(apiUri, None, getParams)
+                    status: int = response.status
+                    data: dict = response.data
+                    if 200 == status :
+                        for idx, rs in enumerate(data) :
+                            self.parent.listWidget.addItem(rs['name'])
+                            insertCampingInfo(idx, rs['name'], rs['_id'])
           
         elif _thr_mode == THREAD_MODE.ZONE_LIST :
 
@@ -189,42 +201,42 @@ class SearchThread(QThread):
             if 200 == status and int(data) > 0 :
                 logger.info(f" == ZoneList Count : {data} ")
 
-                global _params_time
-                _params_time['stime'] = self.parent.dateEdit.date().toString("yyyy-MM-dd")
-                _params_time['etime'] = self.parent.dateEdit_2.date().toString("yyyy-MM-dd")
+                # global _params_time
+                # _params_time['stime'] = self.parent.dateEdit.date().toString("yyyy-MM-dd")
+                # _params_time['etime'] = self.parent.dateEdit_2.date().toString("yyyy-MM-dd")
 
-                if -1 != getTimeStamp(_params_time) :           
-                    apiUri = '/v1/camps/zones'
-                    '''
-                        3가지 값은 caculate 전에는 고정
-                        'adult': 2,
-                        'teen': 0,
-                        'child': 0,
-                    '''
-                    getParams = {
-                        'id': _camp_id,
-                        'limit' : data,
-                        'adult': 2,
-                        'teen': 0,
-                        'child': 0,
-                        'startTimestamp': _params_time['stime'],
-                        'endTimestamp' : _params_time['etime'],
-                        'skip' : 0,
-                    }
-                    response = requestGetData(apiUri, _camp_id, getParams)
-                    status: int = response.status
-                    data: dict = response.data
-                    if 200 == status :
-                        for idx, rs in enumerate(data) :
-                            '''
-                                # 예약가능 조건
-                                    rs['isUnavailable'] == False and rs['unavailableReason'] == None
-                            ''' 
-                            if rs['isUnavailable'] != False :
-                                self.parent.listWidget_2.addItem(f"{rs['name']} - {rs['unavailableReason']} X ")
-                            else :
-                                self.parent.listWidget_2.addItem(f"{rs['name']}")
-                            insertZoneInfo(idx, rs['name'], rs['id'], _camp_id)
+                # if -1 != getTimeStamp(_params_time) :           
+                apiUri = '/v1/camps/zones'
+                '''
+                    3가지 값은 caculate 전에는 고정
+                    'adult': 2,
+                    'teen': 0,
+                    'child': 0,
+                '''
+                getParams = {
+                    'id': _camp_id,
+                    'limit' : data,
+                    'adult': 2,
+                    'teen': 0,
+                    'child': 0,
+                    'startTimestamp': _params_time['stime'],
+                    'endTimestamp' : _params_time['etime'],
+                    'skip' : 0,
+                }
+                response = requestGetData(apiUri, _camp_id, getParams)
+                status: int = response.status
+                data: dict = response.data
+                if 200 == status :
+                    for idx, rs in enumerate(data) :
+                        '''
+                            # 예약가능 조건
+                                rs['isUnavailable'] == False and rs['unavailableReason'] == None
+                        ''' 
+                        if rs['isUnavailable'] != False :
+                            self.parent.listWidget_2.addItem(f"{rs['name']} - {rs['unavailableReason']} X ")
+                        else :
+                            self.parent.listWidget_2.addItem(f"{rs['name']}")
+                        insertZoneInfo(idx, rs['name'], rs['id'], _camp_id)
 
         elif _thr_mode == THREAD_MODE.SITE_LIST :
             self.parent.listWidget_3.clear()

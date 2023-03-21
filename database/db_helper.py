@@ -52,7 +52,7 @@ def insertSiteInfo(idx, name, _id, campId, zoneId):
 def getSelectCampId(idx, name):
     conn = sqlite3.connect('./keydata.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT _id FROM CampingListInfo_T WHERE IDX=:IDX AND CAMP_NAME=:CAMP_NAME;',{"IDX": idx, "CAMP_NAME":name})
+    cursor.execute('SELECT _id FROM CampingListInfo_T WHERE IDX=:IDX AND CAMP_NAME = :CAMP_NAME;',{"IDX": idx, "CAMP_NAME":name})
     rows = cursor.fetchone()    
     if rows == None :
         rows = 0    
